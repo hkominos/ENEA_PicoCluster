@@ -1,0 +1,125 @@
+config-file-header
+ENEASW01
+v1.0.0.15 / RLINUX_922_014
+CLI v1.0
+file SSD indicator encrypted
+@
+ssd-control-start
+ssd config
+ssd file passphrase control unrestricted
+no ssd file integrity control
+ssd-control-end cb0a3fdb1f3a1af4e4430033719968c0
+!
+!
+unit-type-control-start
+unit-type unit 1 network te uplink none
+unit-type-control-end
+!
+vlan database
+vlan 2301-2320
+exit
+voice vlan oui-table add 0001e3 Siemens_AG_phone________
+voice vlan oui-table add 00036b Cisco_phone_____________
+voice vlan oui-table add 00096e Avaya___________________
+voice vlan oui-table add 000fe2 H3C_Aolynk______________
+voice vlan oui-table add 0060b9 Philips_and_NEC_AG_phone
+voice vlan oui-table add 00d01e Pingtel_phone___________
+voice vlan oui-table add 00e075 Polycom/Veritel_phone___
+voice vlan oui-table add 00e0bb 3Com_phone______________
+bonjour interface range vlan 1
+hostname ENEASW01
+!
+interface vlan 2301
+ name openstackpublic
+!
+interface vlan 2302
+ name admin
+!
+interface vlan 2303
+ name management
+!
+interface vlan 2304
+ name storage
+!
+interface TengigabitEthernet1
+ negotiation 1000f
+ description Fuel_master_#1
+ switchport access vlan 2301
+!
+interface TengigabitEthernet2
+ negotiation 1000f
+ description Fuel_master_#2
+ switchport access vlan 2302
+!
+interface TengigabitEthernet3
+ negotiation 1000f
+ description Controller1_#1
+ switchport mode general
+ switchport general allowed vlan add 2301,2304 tagged
+!
+interface TengigabitEthernet4
+ negotiation 1000f
+ description Controller1_#2
+ switchport mode general
+ switchport general allowed vlan add 2303,2305-2320 tagged
+ switchport general allowed vlan add 2302 untagged
+ switchport general pvid 2302
+!
+interface TengigabitEthernet5
+ negotiation 1000f
+ description Controller2_#1
+ switchport mode general
+ switchport general allowed vlan add 2301,2304 tagged
+!
+interface TengigabitEthernet6
+ negotiation 1000f
+ description Controller2_#2
+ switchport mode general
+ switchport general allowed vlan add 2303,2305-2320 tagged
+ switchport general allowed vlan add 2302 untagged
+ switchport general pvid 2302
+!
+interface TengigabitEthernet7
+ negotiation 1000f
+ description Controller3_#1
+ switchport mode general
+ switchport general allowed vlan add 2301,2304 tagged
+!
+interface TengigabitEthernet8
+ negotiation 1000f
+ description Controller3_#2
+ switchport mode general
+ switchport general allowed vlan add 2303,2305-2320 tagged
+ switchport general allowed vlan add 2302 untagged
+ switchport general pvid 2302
+!
+interface TengigabitEthernet9
+ negotiation 1000f
+ description Compute1_#1
+ switchport mode general
+ switchport general allowed vlan add 2301,2303-2320 tagged
+ switchport general allowed vlan add 2302 untagged
+ switchport general pvid 2302
+!
+interface TengigabitEthernet10
+ negotiation 1000f
+ description Compute2_#1
+ switchport mode general
+ switchport general allowed vlan add 2301,2303-2320 tagged
+ switchport general allowed vlan add 2302 untagged
+ switchport general pvid 2302
+!
+interface TengigabitEthernet11
+ negotiation 1000f
+ description Demo_Workstation
+ switchport mode general
+ switchport general allowed vlan add 2301,2303-2320 tagged
+ switchport general allowed vlan add 2302 untagged
+ switchport general pvid 2302
+!
+interface TengigabitEthernet12
+ negotiation 1000f
+ description Router/Internet
+ switchport access vlan 2301
+!
+exit
