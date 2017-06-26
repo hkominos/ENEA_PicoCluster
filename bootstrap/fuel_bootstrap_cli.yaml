@@ -1,0 +1,64 @@
+---
+  root_ssh_authorized_file: /root/.ssh/id_rsa.pub
+  extend_kopts: "biosdevname=1 net.ifnames=0"
+  ubuntu_release: xenial
+  extra_dirs:
+    - /usr/share/fuel_bootstrap_cli/files/xenial
+  output_dir: /tmp/
+  kernel_flavor: linux-image-4.4.0-9977-generic
+  packages:
+    - daemonize
+    - fuel-agent
+    - hwloc
+    - i40e-dkms
+    - linux-firmware
+    - linux-headers-4.4.0-9977-generic
+    - live-boot
+    - live-boot-initramfs-tools
+    - lshw
+    - mc
+    - mcollective
+    - msmtp-mta
+    - multipath-tools
+    - multipath-tools-boot
+    - nailgun-agent
+    - nailgun-mcagents
+    - network-checker
+    - ntp
+    - ntpdate
+    - openssh-client
+    - openssh-server
+    - puppet
+    - squashfs-tools
+    - ubuntu-minimal
+    - vim
+    - wget
+    - xz-utils
+    - sysfsutils
+    - bridge-utils
+    - ifenslave
+    - irqbalance
+    - iputils-arping
+  bootstrap_images_dir: /var/www/nailgun/bootstraps
+  active_bootstrap_symlink: /var/www/nailgun/bootstraps/active_bootstrap
+  flavor: ubuntu
+  http_proxy: ""
+  https_proxy: ""
+  repos:
+    - name: ubuntu-local
+      section: main
+      uri: "http://127.0.0.1:8080/mirrors/ubuntu"
+      priority:
+      suite: xenial
+      type: deb
+    - name: mos-local
+      section: "main restricted"
+      uri: "http://127.0.0.1:8080/ubuntu/x86_64"
+      priority: 1050
+      suite: mos10.0
+      type: deb
+  no_proxy: ""
+  skip_default_img_build: false
+  direct_repo_addresses:
+    - "10.20.0.2"
+    - "127.0.0.1"
