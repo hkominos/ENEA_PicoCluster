@@ -11,15 +11,19 @@ fi
 
 UBOOT_REPO=https://github.com/MarvellEmbeddedProcessors/u-boot-marvell
 UBOOT_DIR=$(readlink -f $(basename "${UBOOT_REPO}"))
-UBOOT_BRANCH=u-boot-2015.01-armada-17.04
+UBOOT_BRANCH=u-boot-2017.03-armada-17.06
+
+BINARIES_REPO=https://github.com/MarvellEmbeddedProcessors/binaries-marvell
+BINARIES_DIR=$(readlink -f $(basename "${BINARIES_REPO}"))
+BINARIES_BRANCH=binaries-marvell-armada-17.06
 
 ATF_REPO=https://github.com/MarvellEmbeddedProcessors/atf-marvell
 ATF_DIR=$(readlink -f $(basename "${ATF_REPO}"))
-ATF_BRANCH=atf-v1.3-17.04
+ATF_BRANCH=atf-v1.3-armada-17.06
 
 MV_DDR_REPO=https://github.com/MarvellEmbeddedProcessors/mv-ddr-marvell
 MV_DDR_DIR=$(readlink -f $(basename "${MV_DDR_REPO}"))
-MV_DDR_BRANCH=mv_ddr-armada-17.04
+MV_DDR_BRANCH=mv_ddr-armada-17.06
 
 export CROSS_COMPILE=aarch64-linux-gnu-
 
@@ -37,7 +41,7 @@ fi
 
 cd "${UBOOT_DIR}"
 if [ ! -f .config ]; then
-  make mvebu_armada80x0_customer0_mcbin_defconfig
+  make mvebu_mcbin-88f8040_defconfig
 fi
 
 make -j"$(nproc)"
@@ -51,13 +55,18 @@ if [ ! -d "${ATF_DIR}" ]; then
   git clone -b "${ATF_BRANCH}" "${ATF_REPO}"
 fi
 
+if [ ! -d "${BINARIES_DIR}" ]; then
+  git clone -b "${BINARIES_BRANCH}" "${BINARIES_REPO}"
+fi
+export SCP_BL2="${BINARIES_DIR}/RTOSDemo-cm3.bin"
+
 if [ ! -d "${MV_DDR_DIR}" ]; then
   git clone -b "${MV_DDR_BRANCH}" "${MV_DDR_REPO}"
 fi
 
 cd "${ATF_DIR}"
 make USE_COHERENT_MEM=0 LOG_LEVEL=20 MV_DDR_PATH="${MV_DDR_DIR}" \
-  PLAT=a80x0_cust all fip
+  PLAT=a80x0_mcbin all fip
 cd -
 
-cp "${ATF_DIR}/build/a80x0_cust/release/flash-image.bin" flash-image-u-boot.bin
+cp "${ATF_DIR}/build/a80x0_mcbin/release/flash-image.bin" flash-image-u-boot.bin
