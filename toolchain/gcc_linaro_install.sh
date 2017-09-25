@@ -9,7 +9,7 @@ if [ "$(uname -i)" != 'x86_64' ]; then
   exit 1
 fi
 
-TOOLCHAIN_URL=https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/aarch64-linux-gnu/gcc-linaro-5.2-2015.11-2-x86_64_aarch64-linux-gnu.tar.xz
+TOOLCHAIN_URL=https://releases.linaro.org/components/toolchain/binaries/5.3-2016.05/aarch64-linux-gnu/gcc-linaro-5.3.1-2016.05-x86_64_aarch64-linux-gnu.tar.xz
 TOOLCHAIN_ARCHIVE=$(basename "${TOOLCHAIN_URL}")
 TOOLCHAIN_SUBDIR=${TOOLCHAIN_ARCHIVE%.tar*}
 TOOLCHAIN_SCRIPT=$(readlink -f "$BASH_SOURCE")
