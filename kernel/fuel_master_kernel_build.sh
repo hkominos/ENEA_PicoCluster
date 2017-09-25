@@ -11,7 +11,7 @@ fi
 
 KERNEL_REPO=https://github.com/MarvellEmbeddedProcessors/linux-marvell
 KERNEL_DIR=$(basename "${KERNEL_REPO}")
-KERNEL_BRANCH=linux-4.4.52-armada-17.06
+KERNEL_BRANCH=linux-4.4.52-armada-17.10
 
 export ARCH=arm64
 export CROSS_COMPILE=aarch64-linux-gnu-
@@ -30,7 +30,7 @@ if [ ! -d "${KERNEL_DIR}" ]; then
   MISSING_COMMIT=6ff64f6f9242d7e50f3e99cb280f69d1927a5fa6
   wget https://github.com/torvalds/linux/commit/${MISSING_COMMIT}.patch \
     -O /tmp/${MISSING_COMMIT}.patch
-  git am -C "${KERNEL_DIR}" -3 /tmp/${MISSING_COMMIT}.patch
+  git -C "${KERNEL_DIR}" am -3 /tmp/${MISSING_COMMIT}.patch
   rm /tmp/${MISSING_COMMIT}.patch
 fi
 
