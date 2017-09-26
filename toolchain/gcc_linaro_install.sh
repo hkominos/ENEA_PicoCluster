@@ -25,3 +25,4 @@ fi
 cd -
 
 export PATH=$PATH:"${TOOLCHAIN_DIR}/${TOOLCHAIN_SUBDIR}/bin"
+export GCC5_AARCH64_PREFIX="${TOOLCHAIN_DIR}/${TOOLCHAIN_SUBDIR}/bin/aarch64-linux-gnu-"
