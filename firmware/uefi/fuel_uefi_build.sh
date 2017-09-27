@@ -41,6 +41,7 @@ EDK2_BRANCH=master
 EDK2_OPEN_PLATFORM_REPO=https://github.com/MarvellEmbeddedProcessors/edk2-open-platform
 EDK2_OPEN_PLATFORM_DIR=$(readlink -f $(basename "${EDK2_OPEN_PLATFORM_REPO}"))
 EDK2_OPEN_PLATFORM_BRANCH=marvell-armada-wip
+EDK2_OPEN_PLATFORM_COMMITS="59ef72f 35292cf"
 
 ATF_REPO=https://github.com/MarvellEmbeddedProcessors/atf-marvell
 ATF_DIR=$(readlink -f $(basename "${ATF_REPO}"))
@@ -60,6 +61,13 @@ fi
 
 if [ ! -d "${EDK2_OPEN_PLATFORM_DIR}" ]; then
   git clone -b "${EDK2_OPEN_PLATFORM_BRANCH}" "${EDK2_OPEN_PLATFORM_REPO}"
+
+  # PicoPod specifics: allow UEFI MAC override, switch 10G SFI to 1G SGMII
+  git -C "${EDK2_OPEN_PLATFORM_DIR}" \
+    checkout -b "${EDK2_OPEN_PLATFORM_BRANCH}-picopod"
+  for commit in ${EDK2_OPEN_PLATFORM_COMMITS}; do
+    git -C "${EDK2_OPEN_PLATFORM_DIR}" cherry-pick -X ours "${commit}"
+  done
 fi
 
 if [ ! -d "${ATF_DIR}" ]; then
