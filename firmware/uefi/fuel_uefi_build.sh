@@ -103,7 +103,9 @@ dtc -I dtb -O dts "${DTS_DIR}/${MCBIN_DTB}" 2> /dev/null > \
 export ARCH=arm64
 for idx in $(seq -f "%02g" "${MAC_START}" "${MAC_END}"); do
   cd "${DTS_DIR}"
-  sed "s/mac-address = \[00 00 00 00 00/mac-address = \[${MAC_PREFIX} ${idx}/g" \
+  # Hack: replacing the reference in DTB is *extremely* fragile, but quick
+  sed -e "s/mac-address = \[00 00 00 00 00/mac-address = \[${MAC_PREFIX} ${idx}/g" \
+      -e "s/0x90fc/0x20fc/g" -e "s/sfi/sgmii/g" \
     "${MCBIN_DTB%dtb}dts" > "${MCBIN_DTB%dtb}${idx}.dts"
   dtc -I dts -O dtb "${MCBIN_DTB%dtb}${idx}.dts" 2> /dev/null > \
     "${EDK2_OPEN_PLATFORM_DIR}/Platforms/Marvell/Armada/${MCBIN_DTB}"
