@@ -23,10 +23,17 @@ MAC_PREFIX="02 50 43 00"
 MAC_START=1
 MAC_END=12
 
+# DSC
+MCBIN_DSC="Platforms/Marvell/Armada/Armada80x0McBin.dsc"
+DSC_MAC_BEFORE="0x22, 0x22, 0x33, 0x33, 0x44"
+DSC_MAC_PREFIX="0x$(echo ${MAC_PREFIX} | sed 's/ /, 0x/g')"
+
 if [ ! -f "${DTB_DIR}/${MCBIN_DTB}" ]; then
   echo "ERR: This script requires the kernel to be built first."
   exit 2
 fi
+
+mkdir -p "${DTS_DIR}"
 
 # Setup cross-gcc toolchain
 source ../../toolchain/gcc_linaro_install.sh
@@ -68,6 +75,10 @@ if [ ! -d "${EDK2_OPEN_PLATFORM_DIR}" ]; then
   for commit in ${EDK2_OPEN_PLATFORM_COMMITS}; do
     git -C "${EDK2_OPEN_PLATFORM_DIR}" cherry-pick -X ours "${commit}"
   done
+  git -C "${EDK2_OPEN_PLATFORM_DIR}" am -3 --ignore-whitespace "$(pwd)/"*.patch
+
+  # Save DSC from edk2-open-platform
+  cp "${EDK2_OPEN_PLATFORM_DIR}/${MCBIN_DSC}" "${DTS_DIR}"
 fi
 
 if [ ! -d "${ATF_DIR}" ]; then
@@ -85,7 +96,6 @@ make -C BaseTools
 source edksetup.sh
 
 # Copy DTB from kernel build, customize MACs for each build
-mkdir -p "${DTS_DIR}"
 cp "${DTB_DIR}/${MCBIN_DTB}" "${DTS_DIR}"
 dtc -I dtb -O dts "${DTS_DIR}/${MCBIN_DTB}" 2> /dev/null > \
   "${DTS_DIR}/${MCBIN_DTB%dtb}dts"
@@ -98,9 +108,12 @@ for idx in $(seq -f "%02g" "${MAC_START}" "${MAC_END}"); do
   dtc -I dts -O dtb "${MCBIN_DTB%dtb}${idx}.dts" 2> /dev/null > \
     "${EDK2_OPEN_PLATFORM_DIR}/Platforms/Marvell/Armada/${MCBIN_DTB}"
 
+  sed "s/${DSC_MAC_BEFORE}/${DSC_MAC_PREFIX}, 0x${idx}/g" \
+    "${DTS_DIR}/$(basename ${MCBIN_DSC})" > \
+    "${EDK2_OPEN_PLATFORM_DIR}/${MCBIN_DSC}"
+
   cd "${EDK2_DIR}"
-  build -a AARCH64 -t GCC5 -b RELEASE \
-        -p OpenPlatformPkg/Platforms/Marvell/Armada/Armada80x0McBin.dsc
+  build -a AARCH64 -t GCC5 -b RELEASE -p "OpenPlatformPkg/${MCBIN_DSC}"
 
   cd "${ATF_DIR}"
   make distclean # can't be included in below `make` call

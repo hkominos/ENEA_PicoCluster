@@ -1,0 +1,31 @@
+From: Alexandru Avadanii <Alexandru.Avadanii@enea.com>
+Date: Thu, 28 Sep 2017 02:41:06 +0200
+Subject: [PATCH] Platforms/Armada80x0Mcbin: Add all MAC overrides
+
+This is a dummy change that will ease mass replacing the MAC
+prefix later, so we end up with all possible MACs aligned
+with kernel DTB values.
+
+Signed-off-by: Alexandru Avadanii <Alexandru.Avadanii@enea.com>
+---
+ Platforms/Marvell/Armada/Armada80x0McBin.dsc | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/Platforms/Marvell/Armada/Armada80x0McBin.dsc b/Platforms/Marvell/Armada/Armada80x0McBin.dsc
+index fa8d8f2..63a46db 100644
+--- a/Platforms/Marvell/Armada/Armada80x0McBin.dsc
++++ b/Platforms/Marvell/Armada/Armada80x0McBin.dsc
+@@ -147,7 +147,12 @@
+   gMarvellTokenSpaceGuid.PcdPp2Port2Controller|{ 0x0, 0x1, 0x1, 0x1 }
+   gMarvellTokenSpaceGuid.PcdPp2PortIds|{ 0x0, 0x0, 0x1, 0x2 }
+   gMarvellTokenSpaceGuid.PcdPp2Controllers|{ 0x1, 0x1 }
+-  gMarvellTokenSpaceGuid.PcdPp2MacAddressEth2|{ 0x22, 0x22, 0x33, 0x33, 0x44, 0x44 }
++  gMarvellTokenSpaceGuid.PcdPp2MacAddressEth0|{ 0x22, 0x22, 0x33, 0x33, 0x44, 0x01 }
++  gMarvellTokenSpaceGuid.PcdPp2MacAddressEth1|{ 0x22, 0x22, 0x33, 0x33, 0x44, 0x04 }
++  gMarvellTokenSpaceGuid.PcdPp2MacAddressEth2|{ 0x22, 0x22, 0x33, 0x33, 0x44, 0x05 }
++  gMarvellTokenSpaceGuid.PcdPp2MacAddressEth3|{ 0x22, 0x22, 0x33, 0x33, 0x44, 0x06 }
++  gMarvellTokenSpaceGuid.PcdPp2MacAddressEth4|{ 0x22, 0x22, 0x33, 0x33, 0x44, 0x02 }
++  gMarvellTokenSpaceGuid.PcdPp2MacAddressEth5|{ 0x22, 0x22, 0x33, 0x33, 0x44, 0x03 }
+ 
+   #PciEmulation
+   gMarvellTokenSpaceGuid.PcdPciEXhci|{ 0x1, 0x1, 0x1, 0x0 }
