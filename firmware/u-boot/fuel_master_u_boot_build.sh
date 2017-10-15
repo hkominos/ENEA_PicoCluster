@@ -4,7 +4,7 @@ set -ex
 # Based on:
 # http://wiki.macchiatobin.net/tiki-index.php?page=Build+from+source+-+Bootloader
 
-if [ "$(uname -i)" != 'x86_64' ]; then
+if [ "$(uname -m)" != 'x86_64' ]; then
   echo "ERR: This script only supports 86_64 arch."
   exit 1
 fi
