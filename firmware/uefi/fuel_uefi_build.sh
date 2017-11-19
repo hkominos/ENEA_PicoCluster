@@ -44,6 +44,7 @@ source ../../toolchain/gcc_linaro_install.sh
 EDK2_REPO=https://github.com/tianocore/edk2
 EDK2_DIR=$(readlink -f $(basename "${EDK2_REPO}"))
 EDK2_BRANCH=master
+EDK2_COMMITS_TO_REVERT='3380a59 1894a7c'
 
 EDK2_OPEN_PLATFORM_REPO=https://github.com/MarvellEmbeddedProcessors/edk2-open-platform
 EDK2_OPEN_PLATFORM_DIR=$(readlink -f $(basename "${EDK2_OPEN_PLATFORM_REPO}"))
@@ -64,6 +65,9 @@ export BL33=${EDK2_DIR}/Build/Armada80x0McBin-AARCH64/RELEASE_GCC5/FV/ARMADA_EFI
 
 if [ ! -d "${EDK2_DIR}" ]; then
   git clone -b "${EDK2_BRANCH}" "${EDK2_REPO}"
+  for commit in ${EDK2_COMMITS_TO_REVERT}; do
+    git -C "${EDK2_DIR}" revert "${commit}" --no-edit
+  done
 fi
 
 if [ ! -d "${EDK2_OPEN_PLATFORM_DIR}" ]; then
